@@ -26,7 +26,7 @@ public class msgshow {
             javax.mail.Session session = javax.mail.Session.getDefaultInstance(props, null);
             System.out.println("Receiving mail...");
             Store store = session.getStore("pop3s");
-            store.connect("pop.mail.ru", "enzit", "Chr0nicle$");
+            store.connect("pop.mail.ru", "", "");
             Folder folder = store.getFolder("INBOX");
             folder.open(Folder.READ_ONLY);
             Message message[] = folder.getMessages();
