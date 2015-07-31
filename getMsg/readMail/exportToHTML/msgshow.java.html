@@ -1,0 +1,136 @@
+<html>
+<head>
+<title>msgshow.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { }
+.s1 { color: rgb(0,0,128); font-weight: bold; }
+.s2 { color: rgb(0,128,0); font-weight: bold; }
+.s3 { color: rgb(128,128,128); font-style: italic; }
+.s4 { color: rgb(0,0,255); }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+msgshow.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0"> 
+</span><span class="s1">import </span><span class="s0">java.util.*; 
+</span><span class="s1">import </span><span class="s0">java.io.*; 
+</span><span class="s1">import </span><span class="s0">javax.mail.*; 
+</span><span class="s1">import </span><span class="s0">java.awt.datatransfer.*; 
+</span><span class="s1">import </span><span class="s0">java.awt.*; 
+ 
+</span><span class="s1">public class </span><span class="s0">msgshow { 
+ 
+    </span><span class="s1">public static void </span><span class="s0">main(String argv[]) { 
+ 
+        String str = </span><span class="s2">&quot;&quot;</span><span class="s0">; 
+        String str1 = </span><span class="s2">&quot;&quot;</span><span class="s0">; 
+        String strFind; 
+        String text; 
+        String result; 
+        </span><span class="s1">int </span><span class="s0">indexStart; 
+        </span><span class="s1">int </span><span class="s0">lengthStr; 
+ 
+        </span><span class="s1">try</span><span class="s0">{ 
+            Properties props=</span><span class="s1">new </span><span class="s0">Properties(); 
+            props.put(</span><span class="s2">&quot;mail.smtp.host&quot;</span><span class="s0">, </span><span class="s2">&quot;whatever&quot;</span><span class="s0">); 
+            </span><span class="s3">// set as properties as needed</span><span class="s0"> 
+ 
+            javax.mail.Session session = javax.mail.Session.getDefaultInstance(props, </span><span class="s1">null</span><span class="s0">); 
+            System.out.println(</span><span class="s2">&quot;Receiving mail...&quot;</span><span class="s0">); 
+            Store store = session.getStore(</span><span class="s2">&quot;pop3s&quot;</span><span class="s0">); 
+            store.connect(</span><span class="s2">&quot;pop.mail.ru&quot;</span><span class="s0">, </span><span class="s2">&quot;enzit&quot;</span><span class="s0">, </span><span class="s2">&quot;Chr0nicle$&quot;</span><span class="s0">); 
+            Folder folder = store.getFolder(</span><span class="s2">&quot;INBOX&quot;</span><span class="s0">); 
+            folder.open(Folder.READ_ONLY); 
+            Message message[] = folder.getMessages(); 
+            strFind = (</span><span class="s2">&quot;Subscribe by July&quot;</span><span class="s0">); 
+            </span><span class="s1">for </span><span class="s0">(</span><span class="s1">int </span><span class="s0">i = </span><span class="s4">0</span><span class="s0">, n = message.length; i &lt; n; i++) { 
+                str = </span><span class="s2">&quot;&quot; </span><span class="s0">+ (message[i].getFrom()[</span><span class="s4">0</span><span class="s0">]); 
+                str1 = </span><span class="s2">&quot;&quot; </span><span class="s0">+ message[i].getSubject(); 
+                </span><span class="s1">if </span><span class="s0">(str.substring(</span><span class="s4">1</span><span class="s0">,</span><span class="s4">5</span><span class="s0">).equals(</span><span class="s2">&quot;STAR&quot;</span><span class="s0">) &amp;&amp; str1.contains(</span><span class="s2">&quot;LAST&quot;</span><span class="s0">)){ 
+                    GetMulti gmulti = </span><span class="s1">new </span><span class="s0">GetMulti(); 
+                    text = gmulti.getText(message[i]); 
+                    </span><span class="s3">//text = &quot;&quot; + message[i].getContent();</span><span class="s0"> 
+                    lengthStr = strFind.length(); 
+                    indexStart = text.indexOf(strFind); 
+                    result = text.substring(indexStart + lengthStr + </span><span class="s4">1</span><span class="s0">, indexStart + lengthStr + </span><span class="s4">3</span><span class="s0">); 
+                    System.out.println(result); 
+                    copyToSystemClipboard(result); 
+                    </span><span class="s1">break</span><span class="s0">; 
+                } 
+ 
+            } 
+            folder.close(</span><span class="s1">false</span><span class="s0">); 
+            store.close(); 
+        } 
+        </span><span class="s1">catch</span><span class="s0">(Exception e){ 
+            System.err.println(e); 
+            e.printStackTrace(); 
+        } 
+    } 
+ 
+    </span><span class="s1">public static class </span><span class="s0">GetMulti { 
+ 
+        </span><span class="s1">public  boolean </span><span class="s0">textIsHtml = </span><span class="s1">false</span><span class="s0">; 
+ 
+        </span><span class="s3">/** 
+         * Return the primary text content of the message. 
+         */</span><span class="s0"> 
+        </span><span class="s1">public </span><span class="s0">String getText(Part p) </span><span class="s1">throws </span><span class="s0">MessagingException, IOException { 
+            </span><span class="s1">if </span><span class="s0">(p.isMimeType(</span><span class="s2">&quot;text/*&quot;</span><span class="s0">)) { 
+                String s = (String)p.getContent(); 
+                textIsHtml = p.isMimeType(</span><span class="s2">&quot;text/html&quot;</span><span class="s0">); 
+                </span><span class="s1">return </span><span class="s0">s; 
+            } 
+ 
+            </span><span class="s1">if </span><span class="s0">(p.isMimeType(</span><span class="s2">&quot;multipart/alternative&quot;</span><span class="s0">)) { 
+                </span><span class="s3">// prefer html text over plain text</span><span class="s0"> 
+                Multipart mp = (Multipart)p.getContent(); 
+                String text = </span><span class="s1">null</span><span class="s0">; 
+                </span><span class="s1">for </span><span class="s0">(</span><span class="s1">int </span><span class="s0">i = </span><span class="s4">0</span><span class="s0">; i &lt; mp.getCount(); i++) { 
+                    Part bp = mp.getBodyPart(i); 
+                    </span><span class="s1">if </span><span class="s0">(bp.isMimeType(</span><span class="s2">&quot;text/plain&quot;</span><span class="s0">)) { 
+                        </span><span class="s1">if </span><span class="s0">(text == </span><span class="s1">null</span><span class="s0">) 
+                            text = getText(bp); 
+                        </span><span class="s1">continue</span><span class="s0">; 
+                    } </span><span class="s1">else if </span><span class="s0">(bp.isMimeType(</span><span class="s2">&quot;text/html&quot;</span><span class="s0">)) { 
+                        String s = getText(bp); 
+                        </span><span class="s1">if </span><span class="s0">(s != </span><span class="s1">null</span><span class="s0">) 
+                            </span><span class="s1">return </span><span class="s0">s; 
+                    } </span><span class="s1">else </span><span class="s0">{ 
+                        </span><span class="s1">return </span><span class="s0">getText(bp); 
+                    } 
+                } 
+                </span><span class="s1">return </span><span class="s0">text; 
+            } </span><span class="s1">else if </span><span class="s0">(p.isMimeType(</span><span class="s2">&quot;multipart/*&quot;</span><span class="s0">)) { 
+                Multipart mp = (Multipart)p.getContent(); 
+                </span><span class="s1">for </span><span class="s0">(</span><span class="s1">int </span><span class="s0">i = </span><span class="s4">0</span><span class="s0">; i &lt; mp.getCount(); i++) { 
+                    String s = getText(mp.getBodyPart(i)); 
+                    </span><span class="s1">if </span><span class="s0">(s != </span><span class="s1">null</span><span class="s0">) 
+                        </span><span class="s1">return </span><span class="s0">s; 
+                } 
+            } 
+ 
+            </span><span class="s1">return null</span><span class="s0">; 
+        } 
+ 
+    } 
+ 
+    </span><span class="s1">public static void </span><span class="s0">copyToSystemClipboard(String str) { 
+ 
+        StringSelection ss = </span><span class="s1">new </span><span class="s0">StringSelection(str); 
+ 
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, </span><span class="s1">null</span><span class="s0">); 
+ 
+    } 
+} 
+</span></pre>
+</body>
+</html>

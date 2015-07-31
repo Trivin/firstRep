@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="msgshow:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/msgshow_jar</output-path>
+    <root id="archive" name="readMail.jar">
+      <element id="module-output" name="readMail" />
+      <element id="extracted-dir" path="F:/temp/javamail/lib/dsn.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="F:/temp/javamail/lib/imap.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="F:/temp/javamail/lib/pop3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="F:/temp/javamail/lib/smtp.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="F:/temp/javamail/lib/gimap.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="F:/temp/javamail/lib/mailapi.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="F:/temp/javamail/mail.jar" path-in-jar="/" />
+      <element id="library" level="project" name="lib" />
+    </root>
+  </artifact>
+</component>
